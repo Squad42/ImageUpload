@@ -27,7 +27,6 @@ def token2username(auth_token:int) -> str:
     return "user1"
 
 def upload_file_to_s3(file, bucket_name, acl="public-read"):
-
     try:
         
         s3.upload_fileobj(
@@ -39,15 +38,9 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
                 "ContentType": file.content_type
             }
         )
-        '''
-        s3.put_object(Body=file,
-                      Bucket=bucket_name,
-                      Key=secure_filename(file.filename),
-                      ContentType=file.mimetype)
-        '''
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
-        print("EXXXXXCEPTION: Something Happened: ", e)
+        print("Something Happened: ", e)
         return e 
     return "{}{}".format(app.config["S3_LOCATION"], file.filename)
 
@@ -100,13 +93,13 @@ def uploadAsFile():
         if "user_file" not in request.files:
             return "No files uploaded!"
         file = request.files['user_file']
-        print("!!!!!!REQUEST MIMETYPE:",request.mimetype)
         print("!!!!!!FILENAME:",file.filename)
         print("!!!!!!CONTENT TYPE:",file.content_type)
         print("!!!!!!CONTENT LENGTH:",file.content_length)
         print("!!!!!!MIMETYPE:",file.mimetype)
-        print("IF FILE?",file)
+        print("!!!!!!OBJECT TYPE:",type(file))
         if file:
+            file.filename = secure_filename(file.filename)
             file_url = upload_file_to_s3(file,app.config['S3_BUCKET'])
             return str(file_url)
     else:

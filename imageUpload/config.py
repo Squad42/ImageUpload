@@ -13,7 +13,7 @@ PROCESSING_SERVICE_ADDRESS = '192.168.2.103'
 ANALYSIS_SERVICE_ADDRESS = '192.168.2.104'
 COMMENTSANDLIKES_SERVICE_ADDRESS = '192.168.2.105'
 
-S3_BUCKET                 = os.environ.get("S3_BUCKET_NAME")
+S3_BUCKET                 = os.environ.get("S3_BUCKET")
 S3_KEY                    = os.environ.get("S3_KEY")
 S3_SECRET                 = os.environ.get("S3_SECRET_ACCESS_KEY")
 S3_LOCATION               = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
