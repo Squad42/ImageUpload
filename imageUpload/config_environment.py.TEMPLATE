@@ -1,0 +1,7 @@
+import os
+
+os.environ['S3_BUCKET'] = "your bucket name"
+os.environ['S3_KEY'] = "your aws access key"
+os.environ['S3_SECRET_ACCESS_KEY'] = "your aws secret access key"
+os.environ['DBX_ACCESS_TOKEN'] = "your Dropbox access token"
+
