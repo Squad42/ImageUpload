@@ -4,3 +4,4 @@ dropbox
 #connexion
 #Flask-Injector
 #fastavro
+Pillow
