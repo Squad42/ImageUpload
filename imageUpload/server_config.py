@@ -18,7 +18,7 @@ try:
         exec(open(config_path).read())
     else:
         #exec(open(config_path_template).read())
-	pass
+        pass
 except Exception as e:
     print("No configuration files found: ", e)
 
