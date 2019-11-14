@@ -6,8 +6,12 @@ APP_ROOT = Path(__file__).resolve().parent
 # DEFAULT_DOWNLOADS_FOLDER = Path("media/downloads/")
 
 # IMPORT ENV VARIABLES
-exec(open(APP_ROOT / "config_environment.py").read())
-
+try:
+	exec(open(APP_ROOT / "config_environment.py").read())
+except Exception as e:
+	print("Error importing environment configuration: ", e)
+	print("Using default config")
+	exec(open(APP_ROOT / "TEMPLATE_config_environment.py").read())
 
 class Config(object):
     DEBUG = False
