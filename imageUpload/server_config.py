@@ -6,12 +6,17 @@ APP_ROOT = Path(__file__).resolve().parent
 # DEFAULT_DOWNLOADS_FOLDER = Path("media/downloads/")
 
 # IMPORT ENV VARIABLES
+config_path = APP_ROOT / "config_environment.py"
+config_path_template = APP_ROOT / "TEMPLATE_config_environment.py"
+
 try:
-	exec(open(APP_ROOT / "config_environment.py").read())
+    if config_path.exists():
+        exec(open(config_path).read())
+    else:
+        exec(open(config_path_template).read())
 except Exception as e:
-	print("Error importing environment configuration: ", e)
-	print("Using default config")
-	exec(open(APP_ROOT / "TEMPLATE_config_environment.py").read())
+    print("No configuration files found: ", e)
+
 
 class Config(object):
     DEBUG = False

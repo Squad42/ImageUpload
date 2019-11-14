@@ -1,7 +1,16 @@
 from imageUpload.server import app
 from imageUpload.server import aws_s3_client as s3
 from imageUpload.server import dropbox_client as dbx
-from flask import flash, redirect, render_template, request, send_from_directory, session, url_for, jsonify
+from flask import (
+    flash,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    session,
+    url_for,
+    jsonify,
+)
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 import requests
@@ -32,7 +41,7 @@ def url_image_to_FileStorage(url, image_binary):
     upload_file_type = url.split(".")[-1]
     upload_file_name = url.split("/")[-1]
     upload_file_content_type = "image/" + upload_file_type
-    upload_file_size = len(upload_file) // 1024    # size in kB
+    upload_file_size = len(upload_file) // 1024  # size in kB
 
     img = Image.open(BytesIO(image_binary))
 
@@ -40,7 +49,13 @@ def url_image_to_FileStorage(url, image_binary):
     img.save(in_mem_file, format=img.format)
     in_mem_file.seek(0)
 
-    return FileStorage(stream=in_mem_file, filename=upload_file_name, content_type=upload_file_content_type, content_length=upload_file_size)
+    return FileStorage(
+        stream=in_mem_file,
+        filename=upload_file_name,
+        content_type=upload_file_content_type,
+        content_length=upload_file_size,
+    )
+
 
 @app.route("/")
 def index():
@@ -48,10 +63,12 @@ def index():
     response = jsonify(Hello="world")
     return response
 
+
 @app.route("/landing_page")
 def landing_page():
     app.logger.info("Displaying landing page")
     return render_template("index.html")
+
 
 def upload_file_to_s3(image_file, bucket_name, acl="public-read"):
     try:
@@ -173,7 +190,7 @@ def upload_image_url(service, version):
 
         url = request.json["image_url"]
         app.logger.info("URL received: %s", url)
-        
+
         if url == "" or url is None:
             return jsonify(message="Empty file path"), 204
 

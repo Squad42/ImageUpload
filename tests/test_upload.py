@@ -1,6 +1,5 @@
 import pytest
-from imageUpload.server import * 
-
+from imageUpload.server import *
 
 
 # content of test_sample.py
