@@ -1,6 +1,6 @@
-from server import app
-from server import aws_s3_client as s3
-from server import dropbox_client as dbx
+from imageUpload.server import app
+from imageUpload.server import aws_s3_client as s3
+from imageUpload.server import dropbox_client as dbx
 from flask import flash, redirect, render_template, request, send_from_directory, session, url_for, jsonify
 from werkzeug import secure_filename
 from werkzeug.datastructures import FileStorage

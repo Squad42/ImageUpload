@@ -141,3 +141,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Pytest stuff
+.pytest_cache
+imageUpload/.pytest_cache
+imageUpload/tests/.pytest_cache
+__pycache__
+imageUpload/__pycache__
+imageUpload/tests/__pycache__
