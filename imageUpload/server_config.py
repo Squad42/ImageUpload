@@ -1,16 +1,20 @@
 import os
 from pathlib import Path
 
-APP_ROOT = Path(__file__).resolve().parent
+# APP_ROOT = Path(__file__).resolve().parent
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 # DEFAULT_UPLOAD_FOLDER = Path("media/users/")
 # DEFAULT_DOWNLOADS_FOLDER = Path("media/downloads/")
 
 # IMPORT ENV VARIABLES
-config_path = APP_ROOT / "config_environment.py"
-config_path_template = APP_ROOT / "TEMPLATE_config_environment.py"
+# config_path = APP_ROOT / "config_environment.py"
+# config_path_template = APP_ROOT / "TEMPLATE_config_environment.py"
+config_path = os.path.join(APP_ROOT, "config_environment.py")
+config_path_template = os.path.join(APP_ROOT, "TEMPLATE_config_environment.py")
 
 try:
-    if config_path.exists():
+    # if config_path.exists():
+    if os.path.exists(config_path):
         exec(open(config_path).read())
     else:
         exec(open(config_path_template).read())
