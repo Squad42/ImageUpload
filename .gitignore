@@ -2,7 +2,7 @@
 
 imageUpload/config_environment.py
 imageUpload/config_dropbox.py
-imageUpload/__pycache__
+imageUpload/__pycache__/
 
 ## ENV / IDE GITIGNORES
 .vscode/
