@@ -5,7 +5,7 @@ from imageUpload.server import *
 
 # content of test_sample.py
 def inc(x):
-    return x + 1
+    return x + 2
 
 
 def test_answer():
