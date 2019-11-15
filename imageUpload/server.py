@@ -19,4 +19,4 @@ if __name__ == "__main__":
     # if not app.config["UPLOAD_FOLDER"].exists():
     #     app.config["UPLOAD_FOLDER"].mkdir(parents=True)
 
-    app.run()
+    app.run(host='0.0.0.0')

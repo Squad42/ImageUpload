@@ -1,8 +1,8 @@
 Flask
 boto3
 dropbox
+Pillow
+#pytest
 #connexion
 #Flask-Injector
 #fastavro
-Pillow
-pytest

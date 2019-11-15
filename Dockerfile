@@ -1,20 +1,18 @@
 FROM python:3.6.8-alpine
 
-MAINTAINER Squad42 "mb2551@student.uni-lj.si"
+LABEL Squad42 project: image for ImageUpload microservice
 
-LABEL image for ImageUpload microservice
+COPY imageUpload/ /imageUpload
+COPY requirements.txt /imageUpload/
+WORKDIR /imageUpload/
 
-WORKDIR /app
-
-COPY requirements.txt /app
-
+RUN apk add build-base python-dev py-pip jpeg-dev zlib-dev
+ENV LIBRARY_PATH=/lib:/usr/lib
+RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
-
-COPY imageUpload/ /app
-
-ENTRYPOINT ["python"]
 
 EXPOSE 5000
 
-CMD ["server.py"]
+ENV FLASK_APP=server.py
+CMD ["python3","-m","flask","run"]
 
