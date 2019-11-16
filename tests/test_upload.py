@@ -12,3 +12,7 @@ def test_imageUpload():
 		s3_file_url = upload_file_to_s3(upload_file, app.config["S3_BUCKET"])
 	assert "amazonaws.com/test.jpg" in s3_file_url
 
+def test_dockerflaskapp_helloworld():
+	response = urllib.request.urlopen('http://python.org/')
+	html = response.read()
+	assert "{\"Hello\":\"world\"}" in html
