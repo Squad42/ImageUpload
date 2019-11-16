@@ -13,6 +13,6 @@ def test_imageUpload():
 	assert "amazonaws.com/test.jpg" in s3_file_url
 
 def test_dockerflaskapp_helloworld():
-	response = urllib.request.urlopen('http://python.org/')
+	response = request.urlopen('http://0.0.0.0:5000')
 	html = response.read()
 	assert "{\"Hello\":\"world\"}" in html
