@@ -12,8 +12,8 @@ before_install:
   - python --version
   - pip install -U pip
   - pip install -U pytest
-  - docker build -t squad42/imageupload .
-  - sudo docker run -d -p5000:5000 squad42/imageupload
+#  - docker build -t squad42/imageupload .
+#  - sudo docker run -d -p5000:5000 squad42/imageupload
 install:
   - pip install -r requirements.txt
 # command to run tests
