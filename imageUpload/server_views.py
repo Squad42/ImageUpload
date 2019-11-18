@@ -16,6 +16,8 @@ from werkzeug.datastructures import FileStorage
 import requests
 from io import BytesIO
 from PIL import Image
+import os
+import json
 
 
 def allowed_file(filename):
@@ -158,6 +160,22 @@ def upload_image(service, version):
             if service == "dbx" and version == "v2":
                 file_url = upload_file_to_dbx(upload_file, "defaut_bucket")
                 upload_service = "Dropbox"
+
+            # TODO: instead check on upload success
+            if "http" in file_url:
+                user_id = int(os.environ.get("USER_ID"))
+                os.environ["USER_ID"] = str(user_id + 1)
+
+                catalogue_api_add = "http://catalogue:5001/images/add"
+                headers = {"Content-type": "application/json", "Accept": "text/plain"}
+                data = {"user_id": user_id, "service": upload_service, "img_uri": str(file_url)}
+
+                r = requests.post(catalogue_api_add, headers=headers, data=json.dumps(data))
+                app.logger.info(
+                    "Added user %s's img-uri entry to catalogue database: %s",
+                    str(user_id),
+                    str(file_url),
+                )
 
             # return str(file_url)
             response = jsonify({"File url": file_url, "Upload service": upload_service})

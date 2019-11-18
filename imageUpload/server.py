@@ -13,6 +13,8 @@ dropbox_client = dropbox.Dropbox(app.config["DBX_ACCESS_TOKEN"])
 
 from imageUpload.server_views import *
 
+os.environ["USER_ID"] = str(1)
+
 if __name__ == "__main__":
 
     # MIGHT COME HANDY FOR TESTING
