@@ -65,6 +65,7 @@ def index():
     response = jsonify(Hello="world")
     return response
 
+
 @app.route("/demo/info", methods=["GET"])
 def demo_info_milestone_1():
     json_info = {
@@ -216,7 +217,10 @@ def upload_image(service, version):
                     user_id = int(os.environ.get("USER_ID"))
                     os.environ["USER_ID"] = str(user_id + 1)
 
-                    catalogue_api_add = "http://catalogue:5001/images/add"
+                    db_ip = os.environ["CATALOGUE_HOSTNAME"]
+                    db_port = os.environ["CATALOGUE_PORT"]
+
+                    catalogue_api_add = "http://" + db_ip + ":" + db_port + "/images/add"
                     headers = {"Content-type": "application/json", "Accept": "text/plain"}
                     data = {"user_id": user_id, "service": upload_service, "img_uri": str(file_url)}
 

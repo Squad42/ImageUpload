@@ -17,7 +17,7 @@ try:
     if os.path.exists(config_path):
         exec(open(config_path).read())
     else:
-        #exec(open(config_path_template).read())
+        # exec(open(config_path_template).read())
         pass
 except Exception as e:
     print("No configuration files found: ", e)
@@ -65,6 +65,9 @@ class DevelopmentConfig(Config):
 
     # DROBPOX (DBX) CONFIG
     DBX_ACCESS_TOKEN = os.environ.get("DBX_ACCESS_TOKEN")
+
+    CATALOGUE_HOSTNAME = os.environ.get("CATALOGUE_HOSTNAME")
+    CATALOGUE_PORT = os.environ.get("CATALOGUE_PORT")
 
 
 class TestingConfig(Config):
