@@ -66,6 +66,21 @@ def index():
     return response
 
 
+@app.route("/upload")
+def upload_service():
+    app.logger.info("Status report: Upload service")
+    response = jsonify(
+        service_status="Upload service running",
+        service_code=200,
+        gui_gateway="/landing_page",
+        api_gateways=[
+            "/upload/files/<string:service>/<string:version>/",
+            "/upload/urls/<string:service>/<string:version>/",
+        ],
+    )
+    return response, 200
+
+
 @app.route("/landing_page")
 def landing_page():
     app.logger.info("Displaying landing page")
@@ -84,7 +99,8 @@ def upload_file_to_s3(image_file, bucket_name, acl="public-read"):
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         app.logger.info("Exception caught uploading to S3: %s", e)
-        return e
+        # return e
+        return "Failed"
     return "{}{}".format(app.config["S3_LOCATION"], image_file.filename)
 
 
@@ -96,10 +112,12 @@ def upload_file_to_dbx(image_file, bucket_name, acl="public-read"):
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         app.logger.info("Exception caught uploading to Dropbox: %s", e)
-        return e
+        # return e
+        return "Failed"
     return file_url
 
 
+# TODO: move service credential checks from each to single point check
 # TODO: possible merge of upload functions
 # @user.route("/upload/<file_type>/<url>/<service>/<version>/", defaults={"url": None})
 @app.route("/upload/files/<string:service>/<string:version>/", methods=["POST"])
@@ -154,10 +172,19 @@ def upload_image(service, version):
             file_url = ""
 
             if service == "aws" and version == "v1":
+                if s3 is None:
+                    response = jsonify(service_status="Missing aws credentials!", service_code=401,)
+                    return response, 200
+
                 file_url = upload_file_to_s3(upload_file, app.config["S3_BUCKET"])
                 upload_service = "Amazon S3"
 
             if service == "dbx" and version == "v2":
+                if dbx is None:
+                    response = jsonify(
+                        service_status="Missing dropbox credentials!", service_code=401,
+                    )
+                    return response, 200
                 file_url = upload_file_to_dbx(upload_file, "defaut_bucket")
                 upload_service = "Dropbox"
 
@@ -242,10 +269,20 @@ def upload_image_url(service, version):
             file_url = ""
 
             if service == "aws" and version == "v1":
+                if s3 is None:
+                    response = jsonify(service_status="Missing aws credentials!", service_code=401,)
+                    return response, 200
                 file_url = upload_file_to_s3(upload_file, app.config["S3_BUCKET"])
                 upload_service = "Amazon S3"
 
             if service == "dbx" and version == "v2":
+
+                if dbx is None:
+                    response = jsonify(
+                        service_status="Missing dropbox credentials!", service_code=401,
+                    )
+                    return response, 200
+
                 file_url = upload_file_to_dbx(upload_file, "defaut_bucket")
                 upload_service = "Dropbox"
 
