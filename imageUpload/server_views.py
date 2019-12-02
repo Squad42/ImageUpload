@@ -65,6 +65,27 @@ def index():
     response = jsonify(Hello="world")
     return response
 
+@app.route("/demo/info", methods=["GET"])
+def demo_info_milestone_1():
+    json_info = {
+        "clani": ["mb2551", "rt0875"],
+        "opis_projekta": "Najin projekt implementira portal za hranjenje, urejanje in deljenje fotografij",
+        "mikrostoritve": ["http://34.77.38.10:5000/upload", "http://35.190.207.89:5001/images"],
+        "github": [
+            "https://github.com/Squad42/ImageUpload",
+            "https://github.com/Squad42/ImageCatalogue",
+        ],
+        "travis": [
+            "https://travis-ci.org/Squad42/ImageUpload",
+            "https://travis-ci.org/Squad42/ImageCatalogue",
+        ],
+        "dockerhub": [
+            "https://hub.docker.com/repository/docker/slosquad42/image_upload",
+            "https://hub.docker.com/repository/docker/slosquad42/image_catalogue",
+        ],
+    }
+    return json.dumps(json_info, indent=2), 200
+
 
 @app.route("/upload")
 def upload_service():
