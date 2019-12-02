@@ -190,19 +190,28 @@ def upload_image(service, version):
 
             # TODO: instead check on upload success
             if "http" in file_url:
-                user_id = int(os.environ.get("USER_ID"))
-                os.environ["USER_ID"] = str(user_id + 1)
 
-                catalogue_api_add = "http://catalogue:5001/images/add"
-                headers = {"Content-type": "application/json", "Accept": "text/plain"}
-                data = {"user_id": user_id, "service": upload_service, "img_uri": str(file_url)}
+                try:
+                    user_id = int(os.environ.get("USER_ID"))
+                    os.environ["USER_ID"] = str(user_id + 1)
 
-                r = requests.post(catalogue_api_add, headers=headers, data=json.dumps(data))
-                app.logger.info(
-                    "Added user %s's img-uri entry to catalogue database: %s",
-                    str(user_id),
-                    str(file_url),
-                )
+                    catalogue_api_add = "http://catalogue:5001/images/add"
+                    headers = {"Content-type": "application/json", "Accept": "text/plain"}
+                    data = {"user_id": user_id, "service": upload_service, "img_uri": str(file_url)}
+
+                    r = requests.post(catalogue_api_add, headers=headers, data=json.dumps(data))
+                    app.logger.info(
+                        "Added user %s's img-uri entry to catalogue database: %s",
+                        str(user_id),
+                        str(file_url),
+                    )
+                except Exception as e:
+                    print("Error saving URL upload entry to database: ", e)
+                    response = jsonify(
+                        service_status="Catalogue image service temporarily unavailable! Try again in a few moments.",
+                        service_code=503,
+                    )
+                    return response, 200
 
             # return str(file_url)
             response = jsonify({"File url": file_url, "Upload service": upload_service})

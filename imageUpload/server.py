@@ -24,7 +24,7 @@ except Exception as e:
 from imageUpload.server_views import *
 
 # todo: replace with user auto increment
-os.environ["USER_ID"] = str(1)
+os.environ["USER_ID"] = str(50)
 
 if __name__ == "__main__":
 
