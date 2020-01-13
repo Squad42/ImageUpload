@@ -18,6 +18,7 @@ from io import BytesIO
 from PIL import Image
 import os
 import json
+from datetime import datetime
 
 
 def allowed_file(filename):
@@ -222,7 +223,13 @@ def upload_image(service, version):
 
                     catalogue_api_add = "http://" + db_ip + ":" + db_port + "/images/add"
                     headers = {"Content-type": "application/json", "Accept": "text/plain"}
-                    data = {"user_id": user_id, "service": upload_service, "img_uri": str(file_url)}
+                    data = {
+                        "user_id": user_id,
+                        "service": upload_service,
+                        "img_uri": str(file_url),
+                        "created_datetime": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "private": False,
+                    }
 
                     r = requests.post(catalogue_api_add, headers=headers, data=json.dumps(data))
                     app.logger.info(
