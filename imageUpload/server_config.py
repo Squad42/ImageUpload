@@ -42,7 +42,7 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SECRET_KEY = os.urandom(32)
+    SECRET_KEY = os.environ.get("FLASK_SECRET_KEY")
     PORT = 5000
 
     # upload restrictions

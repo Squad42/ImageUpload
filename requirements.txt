@@ -6,3 +6,4 @@ Pillow
 #connexion
 #Flask-Injector
 #fastavro
+Flask-JWT==0.3.2
