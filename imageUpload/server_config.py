@@ -69,6 +69,16 @@ class DevelopmentConfig(Config):
     CATALOGUE_HOSTNAME = os.environ.get("CATALOGUE_HOSTNAME")
     CATALOGUE_PORT = os.environ.get("CATALOGUE_PORT")
 
+    # CONFIG SERVER
+    if "CONSUL_HOST" in os.environ:
+    	CONFIG_HOST = os.environ["CONSUL_HOST"]
+    else:
+        CONFIG_HOST = "localhost"
+    if "CONSUL_PORT" in os.environ:
+    	CONFIG_PORT = os.environ["CONSUL_PORT"]
+    else:
+        CONFIG_PORT = 8500
+
 
 class TestingConfig(Config):
     TESTING = True

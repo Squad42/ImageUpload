@@ -2,6 +2,7 @@ Flask
 boto3
 dropbox
 Pillow
+python-consul
 #pytest
 #connexion
 #Flask-Injector
