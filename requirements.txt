@@ -8,3 +8,4 @@ python-consul
 #Flask-Injector
 #fastavro
 Flask-JWT==0.3.2
+python-logstash-async
