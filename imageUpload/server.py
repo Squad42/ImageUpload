@@ -37,14 +37,19 @@ def update_from_consul():
                     "TRAP_HTTP_EXCEPTIONS","EXPLAIN_TEMPLATE_LOADING","PREFERRED_URL_SCHEME",
                     "JSON_AS_ASCII","JSON_SORT_KEYS","JSONIFY_PRETTYPRINT_REGULAR",
                     "JSONIFY_MIMETYPE","TEMPLATES_AUTO_RELOAD","MAX_COOKIE_SIZE"]
-    for key in [k for k in app.config if k not in protected_keys]:
-        index = None
-        index, data = app.config["consul_server"].kv.get(key, index=index)
-        if data is not None:
-            app.config[key]=data["Value"]
-            print("Consul KEY={}\t VALUE={}".format(key,data["Value"]))
-        else:
-            print("Consul KEY={}\t does not exist".format(key))
+    try:
+        for key in [k for k in app.config if k not in protected_keys]:
+            index = None
+            index, data = app.config["consul_server"].kv.get(key, index=index)
+            if data is not None:
+                app.config[key]=data["Value"]
+                print("Consul KEY={}\t VALUE={}".format(key,data["Value"]))
+            else:
+                print("Consul KEY={}\t does not exist".format(key))
+    except Exception as e:
+        print("!!!CONSUL SERVER PROBLEM [{}:{}]\n{}".format(app.config["CONFIG_HOST"],
+                                                        app.config["CONFIG_PORT"],
+                                                        str(e)))                    
 
 try:
     aws_s3_client = boto3.client(

@@ -94,6 +94,32 @@ def index():
     response = jsonify(Hello="world")
     return response
 
+@app.route("/health")
+def health():
+    healthStatus = None
+    if "consul_server" in app.config and app.config["consul_server"] is not None:
+        index = None
+        index, data = app.config["consul_server"].kv.get("imageUpload/healthy", index=index)
+        if data is not None:
+            healthStatus = data["Value"]
+        else:
+            healthStatus = "true"
+    else:
+        healthStatus = "true"
+
+    if "false" in str(healthStatus).lower():
+        response = jsonify(
+        service_status="FAIL",
+        service_code=503)
+        return response, 503
+    else:
+        response = jsonify(
+        service_status="PASS",
+        service_code=200)
+        return response, 200
+        
+            
+
 
 @app.route("/demo/info", methods=["GET"])
 def demo_info_milestone_1():
