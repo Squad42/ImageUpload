@@ -18,6 +18,9 @@ def update_from_consul():
                 print("Consul config server [{}:{}] connected! ".format(
                         app.config["CONFIG_HOST"],
                         app.config["CONFIG_PORT"]))
+                app.config["LOGGER"].info("Consul config server [{}:{}] connected! ".format(
+                        app.config["CONFIG_HOST"],
+                        app.config["CONFIG_PORT"]))
         except:
             app.config["consul_server"]=None
             print("Can not connect to Consul config server [{}:{}] ! ".format(
@@ -46,10 +49,14 @@ def update_from_consul():
                 print("Consul KEY={}\t VALUE={}".format(key,data["Value"]))
             else:
                 print("Consul KEY={}\t does not exist".format(key))
+                app.config["LOGGER"].warning("Consul KEY={}\t does not exist".format(key))
     except Exception as e:
         print("!!!CONSUL SERVER PROBLEM [{}:{}]\n{}".format(app.config["CONFIG_HOST"],
                                                         app.config["CONFIG_PORT"],
-                                                        str(e)))                    
+                                                        str(e)))     
+        app.config["LOGGER"].error("!!!CONSUL SERVER PROBLEM [{}:{}]\n{}".format(app.config["CONFIG_HOST"],
+                                                        app.config["CONFIG_PORT"],
+                                                        str(e)))                       
 
 try:
     aws_s3_client = boto3.client(
@@ -57,6 +64,7 @@ try:
     )
 except Exception as e:
     print("AWS client not established!")
+    app.config["LOGGER"].error("AWS client not established")
     aws_s3_client = None
 
 
@@ -64,6 +72,7 @@ try:
     dropbox_client = dropbox.Dropbox(app.config["DBX_ACCESS_TOKEN"])
 except Exception as e:
     print("DROPBOX client not established!")
+    app.config["LOGGER"].error("DROPBOX client not established!")
     dropbox_client = None
 
 from imageUpload.server_views import *

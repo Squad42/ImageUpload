@@ -41,6 +41,7 @@ def jwt_token_required(func):
             data = jwt.decode(token, app.config["SECRET_KEY"])
             g.user_info = data
             app.logger.info("Logged in user: %s", g.user_info["username"])
+            app.config["LOGGER"].info("Logged in user: %s", g.user_info["username"])
         except:
             return jsonify({"message": "Token is invalid!"}), 403
 
@@ -91,7 +92,8 @@ def url_image_to_FileStorage(url, image_binary):
 @app.route("/")
 def index():
     app.logger.info("New user connected")
-    response = jsonify(Hello="world")
+    app.config["LOGGER"].info("New user connected")
+    response = jsonify(Hello="world!!!")
     return response
 
 @app.route("/health/liveness")
@@ -170,6 +172,7 @@ def demo_info_milestone_1():
 @app.route("/upload")
 def upload_service():
     app.logger.info("Status report: Upload service")
+    app.config["LOGGER"].info("Status report: Upload service")
     response = jsonify(
         service_status="Upload service running",
         service_code=200,
@@ -185,6 +188,7 @@ def upload_service():
 @app.route("/landing_page")
 def landing_page():
     app.logger.info("Displaying landing page")
+    app.config["LOGGER"].info("Displaying landing page")
     return render_template("index.html")
 
 
@@ -200,6 +204,7 @@ def upload_file_to_s3(image_file, bucket_name, acl="public-read"):
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         app.logger.info("Exception caught uploading to S3: %s", e)
+        app.config["LOGGER"].error("Exception caught uploading to S3: %s", e)
         # return e
         return "Failed"
     return "{}{}".format(app.config["S3_LOCATION"], image_file.filename)
@@ -213,6 +218,7 @@ def upload_file_to_dbx(image_file, bucket_name, acl="public-read"):
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         app.logger.info("Exception caught uploading to Dropbox: %s", e)
+        app.config["LOGGER"].error("Exception caught uploading to Dropbox: %s", e)
         # return e
         return "Failed"
     return file_url
@@ -266,6 +272,17 @@ def upload_image(service, version):
                 type(upload_file),
             )
         )
+        app.config["LOGGER"].info(
+            "\n\n\t============ UPLOAD iNFO ============ \nFile %s ||| Filename: %s  || Size: %s \nContent-type: %s || Mime-type %s \nFile-type: %s \n =========================\n"
+            % (
+                upload_file,
+                upload_file.filename,
+                upload_file.content_length,
+                upload_file.content_type,
+                upload_file.mimetype,
+                type(upload_file),
+            )
+        )    
 
         if upload_file and allowed_file(upload_file.filename):
 
@@ -315,6 +332,11 @@ def upload_image(service, version):
                         str(user_id),
                         str(file_url),
                     )
+                    app.config["LOGGER"].info(
+                        "Added user %s's img-uri entry to catalogue database: %s",
+                        str(user_id),
+                        str(file_url),
+                    )
                 except Exception as e:
                     print("Error saving URL upload entry to database: ", e)
                     response = jsonify(
@@ -326,6 +348,7 @@ def upload_image(service, version):
             # return str(file_url)
             response = jsonify({"File url": file_url, "Upload service": upload_service})
             app.logger.info("File url %s  |  Upload service: %s", file_url, upload_service)
+            app.config["LOGGER"].info("File url %s  |  Upload service: %s", file_url, upload_service)
             return response
     else:
         return redirect("/"), 503
@@ -354,6 +377,7 @@ def upload_image_url(service, version):
 
         url = request.json["image_url"]
         app.logger.info("URL received: %s", url)
+        app.config["LOGGER"].info("URL received: %s", url)
 
         if url == "" or url is None:
             return jsonify(message="Empty file path"), 204
@@ -371,6 +395,17 @@ def upload_image_url(service, version):
             return jsonify(message="File size too large for upload."), 413
 
         app.logger.info(
+            "\n\n\t============ UPLOAD iNFO ============ \nFile %s ||| Filename: %s  || Size: %s \nContent-type: %s || Mime-type %s \nFile-type: %s \n =========================\n"
+            % (
+                upload_file,
+                upload_file.filename,
+                upload_file.content_length,
+                upload_file.content_type,
+                upload_file.mimetype,
+                type(upload_file),
+            )
+        )
+        app.config["LOGGER"].info(
             "\n\n\t============ UPLOAD iNFO ============ \nFile %s ||| Filename: %s  || Size: %s \nContent-type: %s || Mime-type %s \nFile-type: %s \n =========================\n"
             % (
                 upload_file,
@@ -408,6 +443,7 @@ def upload_image_url(service, version):
             # return str(file_url)
             response = jsonify({"File url": file_url, "Upload service": upload_service})
             app.logger.info("File url %s  |  Upload service: %s", file_url, upload_service)
+            app.config["LOGGER"].info("File url %s  |  Upload service: %s", file_url, upload_service)
             return response
     else:
         return redirect("/"), 503

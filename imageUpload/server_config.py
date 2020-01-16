@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+import logging
+from logstash_async.handler import AsynchronousLogstashHandler
+from logstash_async.handler import LogstashFormatter
 
 # APP_ROOT = Path(__file__).resolve().parent
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -11,6 +14,25 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 # config_path_template = APP_ROOT / "TEMPLATE_config_environment.py"
 config_path = os.path.join(APP_ROOT, "config_environment.py")
 config_path_template = os.path.join(APP_ROOT, "TEMPLATE_config_environment.py")
+
+
+
+# Sending loggs to logit.io
+# Create the logger and set it's logging level
+logger_logit = logging.getLogger("logstash")
+logger_logit.setLevel(logging.ERROR)        
+# Create the handler
+handler = AsynchronousLogstashHandler(
+    host='fc652908-5b50-4887-8af2-89286e6febe1-ls.logit.io', 
+    port=17326, 
+    ssl_enable=True, 
+    ssl_verify=False,
+    database_path='')
+# Here you can specify additional formatting on your log record/message
+formatter = LogstashFormatter()
+handler.setFormatter(formatter)
+# Assign handler to the logger
+logger_logit.addHandler(handler) 
 
 try:
     # if config_path.exists():
@@ -78,6 +100,8 @@ class DevelopmentConfig(Config):
     	CONFIG_PORT = os.environ["CONSUL_PORT"]
     else:
         CONFIG_PORT = 8500
+
+    LOGGER = logger_logit
 
 
 class TestingConfig(Config):
