@@ -3,6 +3,8 @@ from pathlib import Path
 import logging
 from logstash_async.handler import AsynchronousLogstashHandler
 from logstash_async.handler import LogstashFormatter
+import platform
+import psutil
 
 # APP_ROOT = Path(__file__).resolve().parent
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +31,9 @@ handler = AsynchronousLogstashHandler(
     ssl_verify=False,
     database_path='')
 # Here you can specify additional formatting on your log record/message
-formatter = LogstashFormatter()
+formatter = LogstashFormatter(message_type='python-logstash',
+    extra_prefix='dev',
+    extra=dict(mikrostoritev='imageUpload', okolje='production'))
 handler.setFormatter(formatter)
 # Assign handler to the logger
 logger_logit.addHandler(handler) 
