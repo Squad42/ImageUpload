@@ -186,7 +186,7 @@ def upload_service():
 
 @app.route("/stress")
 def landing_page():
-    return render_template("calc={}".format(sum(range(2**26))))
+    return "calc={}".format(sum(range(2**26)))
 
 @app.route("/landing_page")
 def landing_pagee():
