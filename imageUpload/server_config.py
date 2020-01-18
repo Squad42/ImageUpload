@@ -3,8 +3,6 @@ from pathlib import Path
 import logging
 from logstash_async.handler import AsynchronousLogstashHandler
 from logstash_async.handler import LogstashFormatter
-import platform
-import psutil
 
 # APP_ROOT = Path(__file__).resolve().parent
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
