@@ -184,9 +184,12 @@ def upload_service():
     )
     return response, 200
 
+@app.route("/stress")
+def landing_page():
+    return render_template("calc={}".format(sum(range(2**26))))
 
 @app.route("/landing_page")
-def landing_page():
+def landing_pagee():
     app.logger.info("Displaying landing page")
     app.config["LOGGER"].info("Displaying landing page")
     return render_template("index.html")
@@ -249,6 +252,9 @@ def upload_image(service, version):
             return jsonify(message="No file uploaded"), 204
 
         upload_file = request.files["user_image"]
+        
+        print("\n\n!!!!!!!!!!!!!!!!UPLOAD FILE",type(upload_file),'\n\n')
+        print("\n\n!!!!!!!!!!!!!!!!UPLOAD FILE",upload_file,'\n\n')
 
         if upload_file.filename == "":
             # return "Empty file path!"

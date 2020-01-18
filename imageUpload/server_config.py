@@ -32,7 +32,7 @@ handler = AsynchronousLogstashHandler(
     database_path='')
 # Here you can specify additional formatting on your log record/message
 formatter = LogstashFormatter(message_type='python-logstash',
-    extra_prefix='dev',
+    extra_prefix='extra',
     extra=dict(mikrostoritev='imageUpload', okolje='production'))
 handler.setFormatter(formatter)
 # Assign handler to the logger
