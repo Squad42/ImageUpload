@@ -10,3 +10,4 @@ python-consul
 Flask-JWT==0.3.2
 python-logstash-async
 prometheus_flask_exporter
+
