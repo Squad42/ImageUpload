@@ -3,13 +3,11 @@ import boto3
 import dropbox
 import os
 import consul
-from prometheus_client import make_wsgi_app
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from werkzeug.serving import run_simple
-from flask_prometheus_metrics import register_metrics
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 app.config.from_object("imageUpload.server_config.DevelopmentConfig")
+metrics = PrometheusMetrics(app=app)
 
 #Update configuration from consul server
 @app.before_request
@@ -81,23 +79,14 @@ except Exception as e:
 
 from imageUpload.server_views import *
 
-# provide app's version and deploy environment/config name to set a gauge metric
-register_metrics(app, app_version="v0.1.2", app_config="staging")
-# Plug metrics WSGI app to your main app with dispatcher
-dispatcher = DispatcherMiddleware(app.wsgi_app, {"/metrics": make_wsgi_app()})
-
 # todo: replace with user auto increment
 os.environ["USER_ID"] = str(50)
 
-#Ne deluje, ce je znotraj maina :p
-run_simple(hostname="0.0.0.0", port=5000, application=dispatcher)
+
 
 if __name__ == "__main__":
 
     # MIGHT COME HANDY FOR TESTING
     # if not app.config["UPLOAD_FOLDER"].exists():
     #     app.config["UPLOAD_FOLDER"].mkdir(parents=True)
-    
-    # app.run(host="0.0.0.0")
-    #run_simple(hostname="0.0.0.0", port=5000, application=dispatcher, debug=False)
-    pass
+    app.run(host="0.0.0.0",debug=False)

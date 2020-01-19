@@ -99,15 +99,18 @@ def index():
 @app.route("/health/liveness")
 def liveness():
     healthStatus = None
-    if "consul_server" in app.config and app.config["consul_server"] is not None:
-        index = None
-        index, data = app.config["consul_server"].kv.get("imageUpload/alive", index=index)
-        if data is not None:
-            healthStatus = data["Value"]
+    try:
+        if "consul_server" in app.config and app.config["consul_server"] is not None:
+            index = None
+            index, data = app.config["consul_server"].kv.get("imageUpload/alive", index=index)
+            if data is not None:
+                healthStatus = data["Value"]
+            else:
+                healthStatus = "true"
         else:
             healthStatus = "true"
-    else:
-        healthStatus = "true"
+    except:
+        healthStatus = "false"        
 
     if "false" in str(healthStatus).lower():
         response = jsonify(
@@ -123,15 +126,18 @@ def liveness():
 @app.route("/health/readiness")
 def readiness():
     healthStatus = None
-    if "consul_server" in app.config and app.config["consul_server"] is not None:
-        index = None
-        index, data = app.config["consul_server"].kv.get("imageUpload/ready", index=index)
-        if data is not None:
-            healthStatus = data["Value"]
+    try:
+        if "consul_server" in app.config and app.config["consul_server"] is not None:
+            index = None
+            index, data = app.config["consul_server"].kv.get("imageUpload/ready", index=index)
+            if data is not None:
+                healthStatus = data["Value"]
+            else:
+                healthStatus = "true"
         else:
             healthStatus = "true"
-    else:
-        healthStatus = "true"
+    except:
+        healthStatus = "false"         
 
     if "false" in str(healthStatus).lower():
         response = jsonify(

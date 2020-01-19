@@ -9,4 +9,4 @@ python-consul
 #fastavro
 Flask-JWT==0.3.2
 python-logstash-async
-flask_prometheus_metrics
+prometheus_flask_exporter
