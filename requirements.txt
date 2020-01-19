@@ -10,4 +10,4 @@ python-consul
 Flask-JWT==0.3.2
 python-logstash-async
 #flask_prometheus_metrics
-flask-prometheus-metrics
+flask-prometheus-metrics==1.0.0
